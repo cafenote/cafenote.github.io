@@ -4,15 +4,10 @@
 	<title>CLIPBOARD</title>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
-	<script src="http://code.jquery.com/jquery-1.11.2.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.2.js"></script>
 	<script>
 		console = window.console || {log:function(){}};
 		var stringFromCharCode = String.fromCharCode;
-
-		function displayType( msg ) {
-			var $elem = $("#typeInfo");
-			$elem.val( msg );
-		}
 
 		function displayContent( content ) {
 			var $elem = $("#elm1");
@@ -37,7 +32,6 @@
 					for ( var i = 0 ; i < types.length ; i++ ) {
 						temps += types [ i ] + " " ;
 					}
-					displayType( temps );
 				}
 
 				waitforpastedata(elem, savedcontent);
@@ -82,7 +76,7 @@
 			var newWindow,
 				data = "<p>null</p>",
 				elem = document.getElementById( id ),
-				scriptTag = "<script src=\"http://code.jquery.com/jquery-1.11.2.js\"><\/script>";
+				scriptTag = "<script src=\"https://code.jquery.com/jquery-1.11.2.js\"><\/script>";
 			if ( id ) {
 				data = elem.value;
 			}
