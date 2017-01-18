@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CLIPBOARD</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+	<script src="http://code.jquery.com/jquery-1.11.2.js"></script>
+	<script>
+		console = window.console || {log:function(){}};
+		var stringFromCharCode = String.fromCharCode;
+
+		function displayType( msg ) {
+			var $elem = $("#typeInfo");
+			$elem.val( msg );
+		}
+
+		function displayContent( content ) {
+			var $elem = $("#elm1");
+			$elem.val( content );
+		}
+
+		function handlepaste (elem, e) {
+			var savedcontent = elem.innerhtml;
+
+			if (e && e.clipboardData && e.clipboardData.getData) {
+				if (/text\/html/.test(e.clipboardData.types)) {
+					elem.innerhtml = e.clipboardData.getData('text/html');
+				} else if (/text\/plain/.test(e.clipboardData.types)) {
+					elem.innerhtml = e.clipboardData.getData('text/plain');
+				} else {
+					elem.innerhtml = "";
+				}
+
+				var types =  e.clipboardData.types;
+				if ( types ) {
+					var temps = "[" + e.clipboardData.types.length + "] " ;				
+					for ( var i = 0 ; i < types.length ; i++ ) {
+						temps += types [ i ] + " " ;
+					}
+					displayType( temps );
+				}
+
+				waitforpastedata(elem, savedcontent);
+
+				if (e.preventDefault) {
+					e.stopPropagation();
+					e.preventDefault();
+				}
+
+				return false;
+			} else {
+				// Everything else - empty editdiv and allow browser to paste content into it, then cleanup
+				elem.innerhtml = "";
+				displayType( "Can not access clipboard" );
+				waitforpastedata(elem, savedcontent);
+				return true;
+			}
+		}
+
+		function waitforpastedata (elem, savedcontent) {
+			if (elem.childNodes && elem.childNodes.length > 0) {
+				processpaste(elem, savedcontent);
+			} else {
+				that = {
+					e: elem,
+					s: savedcontent
+				}
+				that.callself = function () {
+					waitforpastedata(that.e, that.s);
+				}
+				setTimeout(that.callself,20);
+			}
+		}
+
+		function processpaste (elem, savedcontent) {
+			pasteddata = elem.innerhtml;
+			elem.innerhtml = savedcontent;
+			displayContent( pasteddata );
+		}
+
+		function viewInPage( id ) {
+			var newWindow,
+				data = "<p>null</p>",
+				elem = document.getElementById( id ),
+				scriptTag = "<script src=\"http://code.jquery.com/jquery-1.11.2.js\"><\/script>";
+			if ( id ) {
+				data = elem.value;
+			}
+
+			if ( /<\/head>/i.test(data) ) {
+				data.replace( /<\/head>/i, scriptTag + "\n</head>\n");
+			} else {
+				data = scriptTag + data;
+			}
+			newWindow = window.open("", "");
+			newWindow.document.write( data );
+		}
+	</script>
+	<style type="text/css">
+		div {
+			border: 1px solid black;
+			height: 60px;
+			width: 650px;
+		}
+		textarea {
+			width: 650px;
+			height: 300px;
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body style="padding-left:10px;">
+	<div id="pasteHere" contenteditable="true" onpaste="handlepaste(this, event)" style="border-style:dotted;border-width:3px;padding:4px;">Paste Here...</div>
+	<br>
+	<br>
+	<span>html : </span>
+	<input type="button" value="view" onclick="viewInPage('elm1')">
+	<br>
+	<textarea id="elm1" name="elm1" ></textarea>
+	<br>
+</body>
+</html>
