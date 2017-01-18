@@ -45,7 +45,6 @@
 			} else {
 				// Everything else - empty editdiv and allow browser to paste content into it, then cleanup
 				elem.innerhtml = "";
-				displayType( "Can not access clipboard" );
 				waitforpastedata(elem, savedcontent);
 				return true;
 			}
