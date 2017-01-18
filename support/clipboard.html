@@ -92,22 +92,23 @@
 			border: 1px solid black;
 			height: 60px;
 			width: 650px;
+			background-color: #fff;
 		}
 		textarea {
 			width: 650px;
-			height: 300px;
+			height: 400px;
 			border: 1px solid black;
 		}
 	</style>
 </head>
-<body style="padding-left:10px;">
+<body style="padding-left:10px; padding-top:10px; background-color:#efefef;">
 	<div id="pasteHere" contenteditable="true" onpaste="handlepaste(this, event)" style="border-style:dotted;border-width:3px;padding:4px;">Paste Here...</div>
 	<br>
 	<br>
 	<span>Clipboard Data(HTML) : </span>
 	<input type="button" value="view" onclick="viewInPage('elm1')">
 	<br>
-	<textarea id="elm1" name="elm1" ></textarea>
+	<textarea id="elm1" name="elm1" readonly></textarea>
 	<br>
 </body>
 </html>
